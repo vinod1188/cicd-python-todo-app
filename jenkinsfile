@@ -1,66 +1,61 @@
 pipeline {
-    
-    agent any 
-    
+
+    agent any
+
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
-    
-    stages {
-        
-        stage('Checkout'){
-           steps { 
-                git branch: 'main', url: 'https://github.com/vinod1188/cicd-python-todo-app.git'
-           }
-        }
 
-        stage('Build Docker'){
-            steps{
-                script{
-                    sh '''
-                    echo 'Buid Docker Image'
+    stages {
+        stage(Checkout) {
+            steps {
+                git branch: 'main', url: 'https://github.com/vinod1188/cicd-python-todo-app.git'
+            }
+        }
+    }
+
+    stage(build docker){
+        steps {
+            script {
+                sh '''
+                echo 'Buid Docker Image'
                     docker build -t vinod1188/python-jenkins-argocd-k8s:${BUILD_NUMBER} .
                     '''
-                }
             }
         }
+    }
 
-        stage('Push the artifacts'){
-           steps{
-                script{
-                    sh '''
-                    echo 'Push to Repo'
-                    docker push vinod1188/python-jenkins-argocd-k8s:${BUILD_NUMBER}
-                    EGISTRY_CREDENTIALS = credentials('docker-cred')
-                    '''
-                }
+    stage(push artifacts) {
+        steps{
+            script{
+                sh '''
+                echo "push the docker image"
+                docker push vinod1188/python-jenkins-argocd-k8s:${BUILD_NUMBER}
+                docker.withRegistry('https://index.docker.io/v1/', "docker-creds")
+                '''
             }
         }
-        
-         stage('Update Deployment File') {
-           environment {
-              GIT_REPO_NAME = "python-jenkins-argocd-k8s"
-              GIT_USER_NAME = "vinod1188"
-        }
-        
-        stage('Update K8S manifest & push to Repo'){
-            steps {
-                script{
-                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) { 
-                        sh '''
-                        cat deploy.yaml
-                        sed -i '' "s/vinod1188/python-jenkins-argocd-k8s/${BUILD_NUMBER}/g" deploy/deploy.yaml
-                        cat deploy.yaml
-                        git add deploy.yaml
-                        git commit -m 'Updated the deploy.yaml | Jenkins Pipeline'
-                        git remote -v
-                        git push https://${GITHUB_TOKEN}@https://github.com/vinod1188/cicd-python-todo-app.git/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-                        '''
-                                                
-                    }
-                }
+    }
+
+    environment {
+        GIT_REPO_NAME = cicd-python-todo-app
+        GIT_USER_NAME = vinod1188
+    }
+    
+    stage( update k8 manifest file and push) {
+        steps {
+            withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                git config user.email "vinod118888@gmail.com"
+                    git config user.name "vinod1188"
+                    BUILD_NUMBER=${BUILD_NUMBER}
+                    sed -i "s/vinod1188/python-jenkins-argocd-k8s/${BUILD_NUMBER}/g" deploy/deploy.yml
+                    git add  deploy/deploy.yml
+                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
             }
         }
     }
 }
-}
+
+
+
