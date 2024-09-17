@@ -38,9 +38,9 @@ pipeline {
         }
         
          stage('Update Deployment File') {
-        environment {
-            GIT_REPO_NAME = "python-jenkins-argocd-k8s"
-            GIT_USER_NAME = "vinod1188"
+           environment {
+              GIT_REPO_NAME = "python-jenkins-argocd-k8s"
+              GIT_USER_NAME = "vinod1188"
         }
         
         stage('Update K8S manifest & push to Repo'){
@@ -62,4 +62,5 @@ pipeline {
             }
         }
     }
+}
 }
