@@ -19,8 +19,8 @@ pipeline {
             script {
                 sh '''
                 echo 'Buid Docker Image'
-                    docker build -t vinod1188/python-jenkins-argocd-k8s:${BUILD_NUMBER} .
-                    '''
+                docker build -t vinod1188/python-jenkins-argocd-k8s:${BUILD_NUMBER} .
+                '''
             }
         }
     }
