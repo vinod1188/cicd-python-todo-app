@@ -9,10 +9,10 @@ pipeline {
     stages {
         
         stage('Checkout'){
-           steps { 
+            steps { 
               git branch: 'main', url: 'https://github.com/vinod1188/cicd-python-todo-app.git',
-            }
         }
+    }
 
         stage('Build Docker'){
             steps{
