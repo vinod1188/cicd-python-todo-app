@@ -46,13 +46,15 @@ pipeline {
     stage('update k8 manifest file and push') {
         steps {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
-                git config user.email "vinod118888@gmail.com"
-                    git config user.name "vinod1188"
-                    BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/vinod1188/python-jenkins-argocd-k8s/${BUILD_NUMBER}/g" deploy/deploy.yml
-                    git add  deploy/deploy.yml
-                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                sh '''
+                  git config user.email "vinod118888@gmail.com"
+                  git config user.name "vinod1188"
+                  BUILD_NUMBER=${BUILD_NUMBER}
+                  sed -i "s/vinod1188/python-jenkins-argocd-k8s/${BUILD_NUMBER}/g" deploy/deploy.yml
+                  git add  deploy/deploy.yml
+                  git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                  git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                  '''
             }
         }
     }
