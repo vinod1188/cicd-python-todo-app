@@ -50,7 +50,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) { {
                         sh '''
                         cat deploy.yaml
-                        sed -i '' "s/vinod1188/python-jenkins-argocd-k8s/${BUILD_NUMBER}/g" python-jenkins-argocd-k8s/deploydeploy.yaml
+                        sed -i '' "s/vinod1188/python-jenkins-argocd-k8s/${BUILD_NUMBER}/g" deploy/deploy.yaml
                         cat deploy.yaml
                         git add deploy.yaml
                         git commit -m 'Updated the deploy.yaml | Jenkins Pipeline'
