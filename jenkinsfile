@@ -46,7 +46,7 @@ pipeline {
         stage('Update K8S manifest & push to Repo'){
             steps {
                 script{
-                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) { {
+                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) { 
                         sh '''
                         cat deploy.yaml
                         sed -i '' "s/vinod1188/python-jenkins-argocd-k8s/${BUILD_NUMBER}/g" deploy/deploy.yaml
