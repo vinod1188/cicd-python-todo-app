@@ -10,7 +10,7 @@ pipeline {
         
         stage('Checkout'){
            steps { 
-                url: 'https://github.com/vinod1188/python-jenkins-argocd-k8s.git',
+                url: 'https://github.com/vinod1188/cicd-python-todo-app.git',
                 branch: 'main'
            }
         }
@@ -55,7 +55,7 @@ pipeline {
                         git add deploy.yaml
                         git commit -m 'Updated the deploy.yaml | Jenkins Pipeline'
                         git remote -v
-                        git push https://${GITHUB_TOKEN}@https://github.com/vinod1188/python-jenkins-argocd-k8s.git/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                        git push https://${GITHUB_TOKEN}@https://github.com/vinod1188/cicd-python-todo-app.git/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                         '''
                                                 
                     }
