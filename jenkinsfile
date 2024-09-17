@@ -7,20 +7,20 @@ pipeline {
     }
 
     stages {
-        stage(Checkout) {
+        stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/vinod1188/cicd-python-todo-app.git'
             }
         }
     }
 
-    stage(build docker){
+    stage('build docker'){
         steps {
             script {
-                sh '''
-                echo 'Buid Docker Image'
-                docker build -t vinod1188/python-jenkins-argocd-k8s:${BUILD_NUMBER} .
-                '''
+               
+                sh 'echo Buid Docker Image'
+                sh 'docker build -t vinod1188/python-jenkins-argocd-k8s:${BUILD_NUMBER} .'
+                
             }
         }
     }
