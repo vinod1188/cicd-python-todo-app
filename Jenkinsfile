@@ -37,11 +37,11 @@ pipeline {
 
         stage('update k8 manifest file and push') {
             steps {
-                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                withCredentials([string(credentialsId: 'githubID', variable: 'GITHUB_TOKEN')]) {
                     sh '''
                         git config user.email "vinod118888@gmail.com"
                         git config user.name "vinod1188"
-                        sed -i "s|vinod1188/python-jenkins-argocd-k8s|vinod1188/python-jenkins-argocd-k8s:${BUILD_NUMBER}|g" deploy/deploy.yml
+                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/g":${BUILD_NUMBER}|g" deploy/deploy.yml
                         git add deploy/deploy.yml
                         git commit -m "Update deployment image to version ${BUILD_NUMBER}"
                         git push https://${GITHUB_TOKEN}@github.com/vinod1188/cicd-python-todo-app HEAD:main
